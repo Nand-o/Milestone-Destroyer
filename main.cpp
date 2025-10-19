@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "user.h"
+#include "handlers.h"
 
 using namespace std;
 
@@ -18,14 +19,13 @@ int main()
 
     // Create a new user
     User user1(1, "Alice", 123);
-    users.push_back(user1);
 
     // Add contacts to the user
     user1.addContact("Bob", 9876);
     user1.addContact("CarLi", 5555);
-
-    // Print user's contacts
     user1.printContacts();
+
+    users.push_back(user1);
 
     bool running = true;
     while (running)
@@ -55,15 +55,13 @@ int main()
             bool found = false;
             for (auto &user : users)
             {
-                user.printContacts();
                 if (user.getName() == name && user.getPhoneNumber() == phone)
                 {
                     cout << "Login successful!" << endl;
                     // currentUser = user;
-                    user.addContact("Bob", 9876);
-                    user.addContact("CarLi", 5555);
                     user.printContacts();
                     found = true;
+                    showUserMenu(user); // Call the login handler
                     break;
                 }
             }
