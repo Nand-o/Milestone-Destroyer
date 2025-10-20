@@ -24,14 +24,32 @@ void showUserMenu(User &user)
             break;
         case 2:
         {
-            string contactName;
-            int contactPhone;
-            cout << "Enter contact name: ";
-            cin >> contactName;
-            cout << "Enter contact phone number: ";
-            cin >> contactPhone;
-            user.addContact(contactName, contactPhone);
-            cout << "Contact added!" << endl;
+            bool isFound = false;
+            while (!isFound)
+            {
+                string contactName;
+                int contactPhone;
+                cout << "Enter contact name: ";
+                cin >> contactName;
+                cout << "Enter contact phone number: ";
+                cin >> contactPhone;
+
+                if(user.addContact(contactName, contactPhone)) {
+                    isFound = true;
+                    cout << "Contact added!" << endl;
+                    break;
+                } else {
+                    cout << "Failed to add contact. Please try again." << endl;
+                    cout << "------------------------" << endl;
+                    // Loop again for valid input
+                    cout << "Do you want to try again? (1 for Yes / 0 for No): ";
+                    int retryChoice;
+                    cin >> retryChoice;
+                    if (retryChoice == 0) {
+                        isFound = true;  // Exit the loop
+                    }
+                }
+            }
             break;
         }
         case 3:

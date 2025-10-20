@@ -4,33 +4,36 @@
 #include <string>
 #include <vector>
 #include "contact.h"
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
 
 class User {
 private :
-    int userIdCounter = 1;
     int userId;
     std::string name;
     int phoneNumber;
     int loginState;
     std::vector<Contact> contacts;
 
-public :
-    User() {
-        this->userId = userIdCounter;
-        userIdCounter++;
-        this->name = "";
-        this->phoneNumber = 0;
-        this->loginState = 0;  // Default login state
-        this->contacts = std::vector<Contact>();
+    int contactIdCounter = 1;
+    static int userIdCounter;
+
+    friend class boost::serialization::access;
+
+    template<class Archive>
+    void serialize(Archive & ar, [[maybe_unused]] const unsigned int version) {
+        ar & userId;
+        ar & name;
+        ar & phoneNumber;
+        ar & loginState;
+        ar & contacts;
+        ar & contactIdCounter;
     }
 
-    User(int id, const std::string& userName, int userPhoneNumber)
-        : name(userName), phoneNumber(userPhoneNumber) {
-            this->userId = userIdCounter;
-            userIdCounter++;
-            this->loginState = 0;  // Default login state
-            this->contacts = std::vector<Contact>();
-    }
+public :
+    User();
+    User(const std::string& userName, int userPhoneNumber);
 
     // Getters
     int getUserId() const { return userId; }
@@ -39,7 +42,7 @@ public :
     std::vector<Contact> getContacts() const { return contacts; }
 
     // Method User
-    void addContact(std::string name, int phoneNumber);
+    bool addContact(std::string name, int phoneNumber);
     void printContacts() const;
 };
 

@@ -2,6 +2,7 @@
 #include <string>
 #include "user.h"
 #include "handlers.h"
+#include "serialization_utils.h"
 
 using namespace std;
 
@@ -17,15 +18,19 @@ int main()
     vector<User> users; // Store registered users
     // User currentUser;
 
-    // Create a new user
-    User user1(1, "Alice", 123);
+    // // Create a new user
+    // User user1(1, "Alice", 123);
 
-    // Add contacts to the user
-    user1.addContact("Bob", 9876);
-    user1.addContact("CarLi", 5555);
-    user1.printContacts();
+    // // Add contacts to the user
+    // user1.addContact("Bob", 9876);
+    // user1.addContact("CarLi", 5555);
+    // user1.printContacts();
 
-    users.push_back(user1);
+    // users.push_back(user1);
+
+    cout << "Loading users data..." << endl;
+    loadData(users, "users_data.bin");
+    cout << "Users data loaded successfully." << endl;
 
     bool running = true;
     while (running)
@@ -47,7 +52,7 @@ int main()
             string name;
             int phone;
             cout << "Enter name: ";
-            cin >> name;
+            getline(cin, name); // To handle spaces in name
             cout << "Enter phone number: ";
             cin >> phone;
 
@@ -61,7 +66,7 @@ int main()
                     // currentUser = user;
                     user.printContacts();
                     found = true;
-                    showUserMenu(user); // Call the login handler
+                    showUserMenu(user); // Call the User Menu Handler
                     break;
                 }
             }
@@ -76,16 +81,17 @@ int main()
             string name;
             int phone;
             cout << "Enter name for registration: ";
-            cin >> name;
+            getline(cin, name); // To handle spaces in name
             cout << "Enter phone number for registration: ";
             cin >> phone;
 
-            User newUser(users.size() + 1, name, phone);
+            User newUser(name, phone);
             users.push_back(newUser);
             cout << "Registration successful!" << endl;
             break;
         }
         case EXIT:
+            saveData(users, "users_data.bin");
             running = false;
             cout << "Exiting the program." << endl;
             break;
